@@ -17,5 +17,9 @@ public:
             return true;
         return false;
     }
-    
 };
+
+int main(){
+    Solution s;
+    cout<<s.isValid("()(()");
+}
