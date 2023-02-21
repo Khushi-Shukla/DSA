@@ -1,73 +1,32 @@
-// Add Binary
+//  Insert Interval
 #include<bits/stdc++.h>
 using namespace std;
 class Solution {
 public:
-    string addBinary(string a, string b) {
-        int carry=0,i,j=a.length()-1, k=b.length()-1;
-        string str="";
-        while(j>=0 && k>=0){
-            if(a[j]=='1' && b[k]=='1'){
-                if(carry==1)
-                    str='1'+str;
-                else
-                    str='0'+str;
-                //str=carry==1?"1":"0"+str;
-                carry=1;
-            }
-            else if((a[j]=='1' && b[k]=='0' )|| (a[j]=='0' && b[k]=='1' )){
-                if(carry==1)
-                    str='0'+str;
-                else{
-                    str='1'+str;
-                    carry=0;
-                }
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        intervals.push_back(newInterval);
+        sort(intervals.begin(),intervals.end());
+        int end=intervals[0][1];
+        int start=intervals[0][0];
+        vector<vector<int>> ans;
+        ans.push_back({start,end});
+        int idx=0;
+
+        for(int i=1;i<intervals.size();i++){
+            if(end>=intervals[i][0]){
+                ans[idx][0]=min(start, intervals[i][0]);
+                ans[idx][1]=max(end, intervals[i][1]);
+                start=ans[idx][0];
+                end = ans[idx][1];
             }
             else{
-                if(carry==1)
-                    str='1'+str;
-                else
-                    str='0'+str;
-                carry=0;
+                ans.push_back({intervals[i][0], intervals[i][1]});
+                start = intervals[i][0];
+                end = intervals[i][1];
+                idx++;
             }
-            j--;
-            k--;
+           
         }
-        
-        while(j>=0){
-             if(a[j]=='1' && carry==1){
-                str='0'+str;
-                carry=1;
-            }
-           else if((a[j]=='1' && carry==0) || (a[j]=='0' && carry==1) ){
-                str='1'+str;
-                carry=0;
-            }
-            else{
-                str=a[j]+str;
-                carry=0;
-            }
-                
-            j--;
-        }
-        
-        while(k>=0){
-             if(b[k]=='1'&& carry==1){
-                str='0'+str;
-                carry=1;
-            }
-            else if((b[k]=='1'&& carry==0) || (b[k]=='0' &&carry==1) ){
-                str='1'+str;
-                carry=0;
-            }
-             else{
-                str=b[k]+str;
-                carry=0;
-            }
-            k--;
-        }
-        if(carry==1)
-            str='1'+str;
-        return str;
+        return ans;
     }
 };
